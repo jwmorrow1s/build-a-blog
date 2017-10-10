@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<br />
+<br />
+<br />
+{% if focus %}
+  <h1>{{focus.title}}</h1>
+  <p>{{focus.body}}</p>
+{% else %}
+  {% for blog in blogs %}
+  <a href="blog?id={{blog.id}}">{{blog.title}}</a>
+  <div class="blog-post">{{blog.body}}</div>
+  <hr/>
+  {% endfor %}
+
+  
+{% endif %}
+
+{% endblock %}

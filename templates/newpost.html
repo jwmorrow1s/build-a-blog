@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+<form action="\newpost" method="POST">
+  <br/> <br />
+  {% if error %}
+  <h3 class="error">Please include both a title and body text.</h3>
+  {% endif %}
+  <label for="title">Title:</label>
+    <input type="text" name="title" />
+  <br/><br />
+  <label for="body">Body:</label>
+    <textarea  name="body" ></textarea>
+  <br/><br />
+  <input type="submit" value="Submit Blog">
+</form>                                   
+{% endblock %}
