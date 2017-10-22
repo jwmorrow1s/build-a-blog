@@ -35,8 +35,30 @@
       }
     </style>
   </head>
+  
+  {% if session['user'] %}
+  <p style="font-size:16px;text-align:right;"><em>Logged in as {{session['user'] }}</em></p>
+  {% endif %}
+  
+  {% with messages = get_flashed_messages(with_categories = True)%}
+    <ul>
+      {% for category,message in messages %}
+      <li class="{{category}}">{{message}}</li>
+      {% endfor %}
+    </ul>
+  {% endwith %}
   <body>
-    <a href="\blog" style="margin-right:20px;">Main Blog Page</a> <a href="\newpost">Add a Blog Entry</a>
+    <!--Another a tag that fetches
+      all the users from the database
+      and lists them as anchors linking to
+      a user page -->
+    <a href="\" style="margin-left:20px;">Home</a>
+    <a href="\newpost">New Post</a>
+    <a href="\blog">All Posts</a>
+    <div class="login" style="float:right">
+      <a href="\login">Login</a>
+      <a href="\logout">Logout</a>
+    </div>
     {% block content %}
     {% endblock %}
   </body>
