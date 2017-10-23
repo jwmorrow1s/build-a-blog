@@ -96,6 +96,7 @@ def newpost():
         if session['user']:
             pass
     except:
+        flash("You must login or register before you can post something")
         return redirect("/login")
     if request.method == "POST":
         if request.form["title"] == "" or request.form["body"] == "":
