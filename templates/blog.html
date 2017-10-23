@@ -8,12 +8,12 @@
 {% if focus %}
   <h1>{{focus.title}}</h1>
   <p>{{focus.body}}</p>
-  <div style="font-size:16px">Written by<a href="/blog?user={{focus.owner.id}}"> {{focus.owner.email}}</a></div>
+  <div style="font-size:16px">Written by<a href="/blog?user={{focus.owner.id}}"> {{focus.owner.username}}</a></div>
 {% else %}
   {% for blog in blogs %}
   <a href="blog?id={{blog.id}}">{{blog.title}}</a>
   <div class="blog-post">{{blog.body}}</div>
-  <div style="font-size:16px">Written by<a href="/blog?user={{blog.owner.id}}"> {{blog.owner.email}}</a></div>
+  <div style="font-size:16px">Written by<a href="/blog?user={{blog.owner.id}}"> {{blog.owner.username}}</a></div>
   <hr/>
   {% endfor %}
 

@@ -16,14 +16,14 @@ def login():
     if request.method == 'GET':
         return render_template('login.html')
     elif request.method == 'POST':
-        email = request.form['email']
+        username = request.form['username']
         password = request.form['password']
-        users = User.query.filter_by(email=email)
-        if users.count() == 1:
-            user = users.first()
+        usernames = [user.username for user in User.query.all()]
+        if username in usernames:
+            user = User.query.filter_by(username=username).first()
             if password == user.password:
-                session['user'] = user.email
-                flash('welcome back, '+user.email)
+                session['user'] = user.username
+                flash('welcome back, '+user.username)
                 return redirect("/")
         flash('bad username or password')
         return redirect("/login")
@@ -31,39 +31,26 @@ def login():
 @app.route("/register", methods=['GET', 'POST'])
 def register():
     if request.method == 'POST':
-        email = request.form['email']
+        username = request.form['username']
         password = request.form['password']
         verify = request.form['verify']
-        if not is_email(email):
-            flash('zoiks! "' + email + '" does not seem like an email address')
+        if not username.isalnum():
+            flash('zoiks! "' + username + '" does not seem like a valid username!')
             return redirect('/register')
-        email_db_count = User.query.filter_by(email=email).count()
-        if email_db_count > 0:
-            flash('yikes! "' + email + '" is already taken and password reminders are not implemented')
+        username_db_count = User.query.filter_by(username=username).count()
+        if username_db_count > 0:
+            flash('yikes! "' + username + '" is already taken and password reminders are not implemented')
             return redirect('/register')
         if password != verify:
             flash('passwords did not match')
             return redirect('/register')
-        user = User(email=email, password=password)
+        user = User(username=username, password=password)
         db.session.add(user)
         db.session.commit()
-        session['user'] = user.email
+        session['user'] = user.username
         return redirect("/")
     else:
         return render_template('register.html')
-
-def is_email(string):
-    # for our purposes, an email string has an '@' followed by a '.'
-    # there is an embedded language called 'regular expression' that would crunch this implementation down
-    # to a one-liner, but we'll keep it simple:
-    atsign_index = string.find('@')
-    atsign_present = atsign_index >= 0
-    if not atsign_present:
-        return False
-    else:
-        domain_dot_index = string.find('.', atsign_index)
-        domain_dot_present = domain_dot_index >= 0
-        return domain_dot_present
 
 @app.route("/logout", methods=['POST', 'GET'])
 def logout():
@@ -103,7 +90,7 @@ def newpost():
             return redirect("/newpost?error=" + str(True))
         title = request.form["title"]
         body = request.form["body"]
-        owner = User.query.filter_by(email = session['user']).first()
+        owner = User.query.filter_by(username = session['user']).first()
         blog = Blog(title,body, owner)
         db.session.add(blog)
         db.session.commit()
