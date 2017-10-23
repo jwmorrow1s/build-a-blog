@@ -92,6 +92,11 @@ def blog():
 
 @app.route("/newpost", methods=["GET", "POST"])
 def newpost():
+    try:
+        if session['user']:
+            pass
+    except:
+        return redirect("/login")
     if request.method == "POST":
         if request.form["title"] == "" or request.form["body"] == "":
             return redirect("/newpost?error=" + str(True))
